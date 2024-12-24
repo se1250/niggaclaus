@@ -102,6 +102,12 @@ let santaMarker = null;
 let routeLine = null;
 let currentSegment = 0;
 let animationInProgress = false;
+let housesRobbed = 0;
+const totalHouses = 2200000000; // 2.2 billion houses
+const initialPercentage = 0.4; // 40%
+const incrementPercentage = 0.006; // 0.6%
+let visitedLocations = 0;
+let lastUpdateTime = Date.now();
 
 function calculateLocalTime(lat, lon) {
     // Calculate approximate local time based on longitude
@@ -188,9 +194,33 @@ function calculateBearing(start, end) {
     return bearing;
 }
 
+function updateHousesCount(isNewLocation = false) {
+    // If this is the first update, set initial value
+    if (housesRobbed === 0) {
+        housesRobbed = Math.floor(totalHouses * initialPercentage);
+    }
+    
+    // If we've reached a new location, add the increment
+    if (isNewLocation) {
+        const increment = Math.floor(totalHouses * incrementPercentage);
+        housesRobbed = Math.min(housesRobbed + increment, totalHouses);
+    }
+    
+    // Format the number with commas
+    const formattedCount = housesRobbed.toLocaleString();
+    document.getElementById('houses-count').textContent = formattedCount;
+}
+
 function animateSanta(route, currentIndex) {
     if (currentIndex >= route.length - 1) {
         currentIndex = 0;
+        housesRobbed = 0; // Reset counter when starting over
+        visitedLocations = 0;
+    }
+
+    // Set initial houses count if starting fresh
+    if (currentIndex === 0 && housesRobbed === 0) {
+        updateHousesCount(false);
     }
 
     const start = L.latLng(route[currentIndex].lat, route[currentIndex].lon);
@@ -218,12 +248,18 @@ function animateSanta(route, currentIndex) {
         document.getElementById('current-country').textContent = route[currentIndex].label;
         document.getElementById('next-country').textContent = route[currentIndex + 1].label;
         
+        // Update houses count only when reaching new location
+        if (frame === frames) {
+            updateHousesCount(true);
+        }
+        
         if (frame < frames) {
             requestAnimationFrame(animate);
         } else {
+            animationInProgress = false;
             setTimeout(() => {
                 animateSanta(route, currentIndex + 1);
-            }, 1000); // 1 second pause between segments
+            }, 1000);
         }
     }
 
@@ -238,6 +274,9 @@ document.addEventListener('DOMContentLoaded', () => {
     map.setView([20, 0], 2);
     
     const sortedRoute = initializeRoute();
+    
+    // Start counter updates
+    setInterval(updateHousesCount, 100); // Update every 100ms
     
     // Start animation after a short delay
     setTimeout(() => {
