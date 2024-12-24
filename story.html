@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NiggaClaus: A Christmas Miracle</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+</head>
+<body class="story-page">
+    <div id="story-container">
+        <a href="index.html" class="back-button">Back to Map</a>
+        <div id="pdf" data-pdf="christmas_story.pdf"></div>
+    </div>
+    <div class="controls-fixed">
+        <button id="prev" class="page-button">
+            <span class="snowflake">❄</span> Previous
+        </button>
+        <span id="page-num"></span>
+        <button id="next" class="page-button">
+            Next <span class="snowflake">❄</span>
+        </button>
+    </div>
+    <script src="story.js"></script>
+</body>
+</html> 
