@@ -104,7 +104,7 @@ let currentSegment = 0;
 let animationInProgress = false;
 let housesRobbed = 0;
 const totalHouses = 2200000000; // 2.2 billion houses
-const initialPercentage = 0.4; // 40%
+const initialPercentage = 0; // Start from 0
 const incrementPercentage = 0.006; // 0.6%
 let visitedLocations = 0;
 let lastUpdateTime = Date.now();
@@ -195,11 +195,6 @@ function calculateBearing(start, end) {
 }
 
 function updateHousesCount(isNewLocation = false) {
-    // If this is the first update, set initial value
-    if (housesRobbed === 0) {
-        housesRobbed = Math.floor(totalHouses * initialPercentage);
-    }
-    
     // If we've reached a new location, add the increment
     if (isNewLocation) {
         const increment = Math.floor(totalHouses * incrementPercentage);
