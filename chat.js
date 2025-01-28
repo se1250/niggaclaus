@@ -48,7 +48,7 @@ Been delivering presents to all the good kids in the hood! What's on ya mind thi
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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'
+                    'Authorization': ''
                 },
                 body: JSON.stringify({
                     model: "tgi",
